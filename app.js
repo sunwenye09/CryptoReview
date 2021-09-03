@@ -16,12 +16,13 @@ const User = require('./models/user_model');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require('./routes/user_routes');
-const businessRoutes = require('./routes/business_routes');
+const projectRoutes = require('./routes/project-routes');
 const reviewRoutes = require('./routes/review_routes');
 
 const MongoDBStore = require("connect-mongo")(session);
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+//const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/crypto-review';
+const dbUrl = 'mongodb://localhost:27017/crypto-review';
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -40,7 +41,7 @@ const app = express();
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views'))     //path.join(__dirname, '/views')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -115,7 +116,7 @@ app.use(
                 "'self'",
                 "blob:",
                 "data:",
-                "https://res.cloudinary.com/douqbebwk/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://res.cloudinary.com/dpelmengt/",
                 "https://images.unsplash.com/",
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
@@ -140,8 +141,8 @@ app.use((req, res, next) => {
 
 
 app.use('/', userRoutes);
-app.use('/businesses', businessRoutes)
-app.use('/businesses/:id/reviews', reviewRoutes)
+app.use('/project', projectRoutes)
+app.use('/project/:id/reviews', reviewRoutes)
 
 
 app.get('/', (req, res) => {
@@ -149,9 +150,10 @@ app.get('/', (req, res) => {
 });
 
 
-app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
-})
+// app.all('*', (req, res, next) => {
+//     console.log(req);
+//     next(new ExpressError('Page Not Found', 404))
+// })
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;

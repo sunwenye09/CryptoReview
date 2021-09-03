@@ -2,21 +2,21 @@
     <link rel="stylesheet" href="/stylesheets/stars.css">
     <div class="row">
         <div class="col-6">
-            <div id="businessCarousel" class="carousel slide" data-ride="carousel">
+            <div id="projectCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
-                    <% business.images.forEach((img, i)=> { %>
+                    <% project.images.forEach((img, i)=> { %>
                         <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
                             <img src="<%= img.url%>" class="d-block w-100" alt="">
                         </div>
                         <% }) %>
 
                 </div>
-                <% if(business.images.length> 1) {%>
-                    <a class="carousel-control-prev" href="#businessCarousel" role="button" data-slide="prev">
+                <% if(project.images.length> 1) {%>
+                    <a class="carousel-control-prev" href="#projectCarousel" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </a>
-                    <a class="carousel-control-next" href="#businessCarousel" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#projectCarousel" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
@@ -26,24 +26,29 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <%= business.title%>
+                        <%= project.title%>
                     </h5>
                     <p class="card-text">
-                        <%= business.description%>
+                        <%= project.description%>
                     </p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item text-muted">
-                        <%= business.location%>
+                        Founded Location: <%= project.location%>
                     </li>
-                    <li class="list-group-item">Submitted by <%= business.author.username%>
-                    </li>
-                    <li class="list-group-item">$<%= business.price%>/night</li>
+                    <% if(project.token) { %>
+                        <li class="list-group-item">
+                            Token: <%= project.token%>
+                        </li>
+                        <%}%>
+                            <li class="list-group-item">
+                                Created by <%= project.author.username%>
+                            </li>
                 </ul>
-                <% if( currentUser && business.author.equals(currentUser._id)) {%>
+                <% if( currentUser && project.author.equals(currentUser._id)) {%>
                     <div class="card-body">
-                        <a class="card-link btn btn-info" href="/businesses/<%=business._id%>/edit">Edit</a>
-                        <form class="d-inline" action="/businesses/<%=business._id%>?_method=DELETE" method="POST">
+                        <a class="card-link btn btn-info" href="/project/<%=project._id%>/edit">Edit</a>
+                        <form class="d-inline" action="/project/<%=project._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                     </div>
@@ -55,12 +60,11 @@
 
         </div>
         <div class="col-6">
-            <div id='map'></div>
+            <!-- <div id='map'></div> -->
 
             <% if(currentUser){ %>
-                <h2>Leave a Review</h2>
-                <form action="/businesses/<%=business._id%>/reviews" method="POST" class="mb-3 validated-form"
-                    novalidate>
+                <h2>How do you think about this project?</h2>
+                <form action="/project/<%=project._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
 
                     <fieldset class="starability-basic">
                         <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
@@ -77,7 +81,7 @@
                         <label for="first-rate5" title="Amazing">5 stars</label>
                     </fieldset>
                     <div class="mb-3">
-                        <label class="form-label" for="body">Review Text</label>
+                        <label class="form-label" for="body">Comments</label>
                         <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"
                             required></textarea>
                         <div class="valid-feedback">
@@ -87,7 +91,7 @@
                     <button class="btn btn-success">Submit</button>
                 </form>
                 <% } %>
-                    <% for(let review of business.reviews) { %>
+                    <% for(let review of project.reviews) { %>
                         <div class="card mb-3 ">
                             <div class="card-body">
                                 <h5 class="card-title">
@@ -96,14 +100,15 @@
                                 <p class="starability-result" data-rating="<%=review.rating%>">
                                     Rated: <%= review.rating %> stars
                                 </p>
-                                <!-- <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username%></h6> -->
-                                <p class="card-text">Review: <%= review.body %>
+                                <p class="card-text">
+                                    <%= review.body %>
                                 </p>
-                                <% if( currentUser && review.author.equals(currentUser._id)) {%>
-                                    <form action="/businesses/<%=business._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                <% if( currentUser && review.author.equals(currentUser._id)) { %>
+                                    <form action="/project/<%=project._id%>/reviews/<%=review._id%>?_method=DELETE"
                                         method="POST">
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </form>
+
                                     <% } %>
                             </div>
                         </div>
@@ -113,7 +118,7 @@
 
     <script>
         const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-        const business = JSON.stringify(business);
+        const project = JSON.stringify(project);
     </script>
 
     <script src="/javascripts/showPageMap.js"></script>

@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const Review = require('./review_model')
 const Schema = mongoose.Schema;
 
-
-// https://res.cloudinary.com/douqbebwk/image/upload/w_300/v1600113904/YelpCamp/gxgle1ovzd2f3dgcpass.png
-
 const ImageSchema = new Schema({
     url: String,
     filename: String
@@ -14,9 +11,9 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200');
 });
 
-const opts = { toJSON: { virtuals: true } };
+const opts = { toJSON: { virtuals: true }, timestamps: true };
 
-const CampgroundSchema = new Schema({
+const ProjectSchema = new Schema({
     title: String,
     images: [ImageSchema],
     geometry: {
@@ -30,9 +27,11 @@ const CampgroundSchema = new Schema({
             required: true
         }
     },
-    price: Number,
-    description: String,
+    founders: String,
+    category: String,
     location: String,
+    token: String,
+    description: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -46,15 +45,15 @@ const CampgroundSchema = new Schema({
 }, opts);
 
 
-CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+ProjectSchema.virtual('properties.popUpMarkup').get(function () {
     return `
-    <strong><a href="/campgrounds/${this._id}">${this.title}</a><strong>
+    <strong><a href="/business/${this._id}">${this.title}</a><strong>
     <p>${this.description.substring(0, 20)}...</p>`
 });
 
 
-
-CampgroundSchema.post('findOneAndDelete', async function (doc) {
+//mongoose post middleware: delete related reviews if a project was deleted
+ProjectSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         await Review.deleteMany({
             _id: {
@@ -64,4 +63,4 @@ CampgroundSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-module.exports = mongoose.model('Campground', CampgroundSchema);
+module.exports = mongoose.model('Project', ProjectSchema);

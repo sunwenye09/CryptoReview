@@ -23,11 +23,13 @@ const extension = (joi) => ({
 
 const Joi = BaseJoi.extend(extension)
 
-module.exports.businessSchema = Joi.object({
-    business: Joi.object({
+module.exports.projectSchema = Joi.object({
+    project: Joi.object({
         title: Joi.string().required().escapeHTML(),
-        price: Joi.number().required().min(0),
+        founders: Joi.string().escapeHTML(),
+        category: Joi.string().escapeHTML(),
         location: Joi.string().required().escapeHTML(),
+        token: Joi.string().escapeHTML(),
         description: Joi.string().required().escapeHTML()
     }).required(),
     deleteImages: Joi.array()

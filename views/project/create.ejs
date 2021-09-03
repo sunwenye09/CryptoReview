@@ -1,25 +1,44 @@
 <% layout('layouts/boilerplate')%>
     <div class="row">
-        <h1 class="text-center">New Business</h1>
+        <h1 class="text-center">New Crypto Project</h1>
         <div class="col-md-6 offset-md-3">
-            <form action="/businesses" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+            <form action="/project" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="business[title]" required>
+                    <input class="form-control" type="text" id="title" name="project[title]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="founders">Founders</label>
+                    <input class="form-control" type="text" id="founders" name="project[founders]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="category">Category</label>
+                    <input class="form-control" type="text" id="category" name="project[category]">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="business[location]" required>
+                    <input class="form-control" type="text" id="location" name="project[location]" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-
-
                 <div class="mb-3">
+                    <label class="form-label" for="token">Token</label>
+                    <input class="form-control" type="text" id="token" name="project[token]">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <!-- <div class="mb-3">
                     <label class="form-label" for="price">Business Price</label>
                     <div class="input-group">
                         <span class="input-group-text" id="price-label">$</span>
@@ -29,11 +48,11 @@
                     <div class="valid-feedback">
                         Looks good!
                     </div>
-                </div>
+                </div> -->
 
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="business[description]"
+                    <textarea class="form-control" type="text" id="description" name="project[description]"
                         required></textarea>
                     <div class="valid-feedback">
                         Looks good!
@@ -49,9 +68,8 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <button class="btn btn-success">Add Business</button>
+                    <button class="btn btn-success">Create Project</button>
                 </div>
             </form>
-            <a href="/businesses">All businesses</a>
         </div>
     </div>

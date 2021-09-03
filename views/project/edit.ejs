@@ -1,42 +1,29 @@
 <% layout('layouts/boilerplate')%>
     <div class="row">
-        <h1 class="text-center">Edit Business</h1>
+        <h1 class="text-center">Edit Project</h1>
         <div class="col-md-6 offset-md-3">
-            <form action="/businesses/<%=business._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+            <form action="/project/<%=project._id%>?_method=PUT" method="POST" novalidate class="validated-form"
                 enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="business[title]"
-                        value="<%=business.title %>" required>
+                    <input class="form-control" type="text" id="title" name="project[title]" value="<%=project.title %>"
+                        required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="business[location]"
-                        value="<%=business.location %>" required>
+                    <input class="form-control" type="text" id="location" name="project[location]"
+                        value="<%=project.location %>" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="price">Business Price</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="price-label">$</span>
-                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                            aria-describedby="price-label" name="business[price]" value="<%=business.price %>"
-                            required>\<div class="valid-feedback">
-                            Looks good!
-                        </div>
-                    </div>
-                </div>
-
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="business[description]"
-                        required><%= business.description%></textarea>
+                    <textarea class="form-control" type="text" id="description" name="project[description]"
+                        required><%= project.description%></textarea>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -51,7 +38,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <% business.images.forEach(function(img, i) { %>
+                    <% project.images.forEach(function(img, i) { %>
 
                         <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
                         <div class="form-check-inline">
@@ -60,11 +47,14 @@
                         <label for="image-<%=i%>">Delete?</label>
                         <% })%>
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-info">Update Business</button>
+                <div class="row">
+                    <div class="col-sm-4 mb-3">
+                        <button class="btn btn-success">Update</button>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <a class="btn btn-secondary" href="/project/<%= project._id%>">Cancel</a>
+                    </div>
                 </div>
             </form>
-            <a href="/businesses/<%= business._id%>">Back To Business</a>
-
         </div>
     </div>

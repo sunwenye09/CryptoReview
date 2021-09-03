@@ -1,19 +1,19 @@
-const { businessSchema, reviewSchema } = require('./schemas.js');
-const ExpressError = require('./utils/ExpressError');
-const Business = require('./models/business_model');
-const Review = require('./models/review_model');
+const { projectSchema, reviewSchema } = require('./validation-schemas.js');
+const ExpressError = require('./ExpressError');
+const Project = require('../models/project-model');
+const Review = require('../models/review_model');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl
         req.flash('error', 'You must be signed in first!');
-        return res.redirect('/login');
+        return res.redirect('/signin');
     }
     next();
 }
 
-module.exports.validateBusiness = (req, res, next) => {
-    const { error } = businessSchema.validate(req.body);
+module.exports.validateProject = (req, res, next) => {
+    const { error } = projectSchema.validate(req.body);
     console.log(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
@@ -25,10 +25,10 @@ module.exports.validateBusiness = (req, res, next) => {
 
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
-    const business = await Business.findById(id);
-    if (!business.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/businesses/${id}`);
+    const project = await Project.findById(id);
+    if (!project.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission for this operation!');
+        return res.redirect(`/project/${id}`);
     }
     next();
 }
@@ -37,8 +37,8 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
     if (!review.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/businesses/${id}`);
+        req.flash('error', 'You do not have permission for this operation!');
+        return res.redirect(`/project/${id}`);
     }
     next();
 }
